@@ -1,0 +1,11 @@
+Package: mbari
+Type: Package
+Depends: oce
+Title: Read MBARI-formatted BioArgo files
+Version: 0.1.0
+Author: Clark Richards, Dan Kelley, Cara Wilson
+Maintainer: Clark Richards <clark.richards@gmail.com>
+Description: Reads the provisional BioArgo data files, provided by the Montery Bay Aquarium Research Institute
+License: GPL-2
+LazyData: TRUE
+RoxygenNote: 5.0.1
