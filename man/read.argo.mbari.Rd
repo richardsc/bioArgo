@@ -10,7 +10,7 @@ read.argo.mbari(file)
 \item{file}{filename or connection from which to read data}
 }
 \value{
-an \code{oce} \code{argo} object, containing the extra data columns
+An \code{oce} \code{argo} object, containing the extra data columns
   corresponding to the biological data.
 }
 \description{
@@ -18,6 +18,13 @@ Reads a "Bio-Argo" formatted file into an \code{oce} \code{argo} object.
 }
 \details{
 Reads the plain-text csv files obtained from \code{http://www.mbari.org/science/upper-ocean-systems/chemical-sensor-group/floatviz/}
+}
+\examples{
+d <- read.argo.mbari(system.file("extdata", "5145HawaiiQc.txt", package="mbari"))
+ds <- as.section(d)
+par(mfrow=c(2, 1))
+plot(d)
+plot(ds, xtype='time', which='oxygen')
 }
 \author{
 Clark Richards, Dan Kelley, Cara Wilson

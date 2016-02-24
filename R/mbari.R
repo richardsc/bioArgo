@@ -9,6 +9,12 @@
 #' @author Clark Richards, Dan Kelley, Cara Wilson
 #' @seealso \code{read.argo}, \code{as.argo}, and \code{as.section} from the
 #'   \code{oce} package
+#' @examples
+#' d <- read.argo.mbari(system.file("extdata", "5145HawaiiQc.txt", package="mbari"))
+#' ds <- as.section(d)
+#' par(mfrow=c(2, 1))
+#' plot(d)
+#' plot(ds, xtype='time', which='oxygen')
 #' @export
 read.argo.mbari <- function(file)
 {
@@ -59,7 +65,6 @@ read.argo.mbari <- function(file)
   names <- gsub("pHinsitu.Total.", "pHinsitu", names)
   names <- gsub("pH25C.Total.", "pH25C", names)
   names <- gsub("BackScatter\\..*", "backscatter", names)
-  ## print(names)
   time <- as.POSIXct(paste(data$mon.day.yr, " ", data$hh.mm, ":00", sep=""), format="%m/%d/%Y %H:%M:%S", tz="UTC")
 
   isQF <- grepl("^QF", names)
@@ -75,21 +80,9 @@ read.argo.mbari <- function(file)
   nprofiles <- length(D)
   nlevels <- length(D[[1]]$pressure)
 
-  ## try making the data fields into matrices, much like how an argo
+  ## make the data fields into matrices, like how an argo
   ## object would be structured
-
   time <- unique(data$time)
-  ## First try -- assume that each of the split profiles has the same
-  ## number of pressure levels (even though the pressures are not
-  ## exactly the same
-  ## longitude <- matrix(data$longitude, ncol=nprofiles, nrow=nlevels)[1,]
-  ## latitude <- matrix(data$latitude, ncol=nprofiles, nrow=nlevels)[1,]
-  ##
-  ## FIXME: for the file 8486Hawaiiqc.txt this isn't the case! So,
-  ## need to be smarter about how to build the matrices ... probably
-  ## look for the profile with the most number of levels, create an
-  ## empty matrix of that size, and then fill in the profiles so the
-  ## last levels are missing
   maxPlevels <- max(unlist(lapply(D, function(x) length(x$pressure))))
   longitude <- unlist(lapply(D, function(x) x$longitude[1]), use.names = FALSE)
   latitude <- unlist(lapply(D, function(x) x$latitude[1]), use.names = FALSE)
@@ -132,8 +125,8 @@ read.argo.mbari <- function(file)
      pHinsituFlag <- makeMatrix(F, 'pHinsitu')
   }
   if ("pH25C" %in% names) {
-  pH25C <- makeMatrix(D, 'pH25C')
-  pH25CFlag <- makeMatrix(F, 'pH25C')
+    pH25C <- makeMatrix(D, 'pH25C')
+    pH25CFlag <- makeMatrix(F, 'pH25C')
   }
 
   d <- as.argo(time=time, longitude=ifelse(longitude>180, longitude-360, longitude),
@@ -165,7 +158,7 @@ read.argo.mbari <- function(file)
     d@metadata$flags$pH25C <- pH25CFlag
   }
 
-  d
+  return(d)
 }
 
 
