@@ -1,3 +1,6 @@
+#' @import oce
+NULL
+
 #' Read an MBARI BioArgo file
 #'
 #' Reads a "Bio-Argo" formatted file into an \code{oce} \code{argo} object.
@@ -30,6 +33,11 @@ read.argo.mbari <- function(file)
   skip <- length(header)
   seek(file, 0, "start")
   data <- read.delim(file, sep="\t", skip=skip, encoding="latin1")
+  id <- regmatches(data$Cruise[1], gregexpr("[0-9]+", data$Cruise[1]))[[1]]
+
+  # this will strip out lines with empty parameters
+  data <- subset(data, !is.na(Depth.m.))
+
   names <- names(data)
 
   ## all possible fields:
@@ -65,6 +73,7 @@ read.argo.mbari <- function(file)
   names <- gsub("pHinsitu.Total.", "pHinsitu", names)
   names <- gsub("pH25C.Total.", "pH25C", names)
   names <- gsub("BackScatter\\..*", "backscatter", names)
+  ## print(names)
   time <- as.POSIXct(paste(data$mon.day.yr, " ", data$hh.mm, ":00", sep=""), format="%m/%d/%Y %H:%M:%S", tz="UTC")
 
   isQF <- grepl("^QF", names)
@@ -73,15 +82,16 @@ read.argo.mbari <- function(file)
   data <- data[,!isQF]
   names(data) <- names[!isQF]
   ## Trim two cols that held time; add in a time column
-  data <- data[-which(names=="mon.day.yr"|names=="hh.mm")]
+  ##>  data <- data[, -which(names=="mon.day.yr"|names=="hh.mm")] # CR had no ","
   data$time <- time
+
+  #sigmaT <- swSigmaT(data$salinity,data$temperature,data$pressure,eos="gsw")
+
   D <- split(data, factor(data$station))
   F <- split(flags, factor(data$station))
   nprofiles <- length(D)
   nlevels <- length(D[[1]]$pressure)
 
-  ## make the data fields into matrices, like how an argo
-  ## object would be structured
   time <- unique(data$time)
   maxPlevels <- max(unlist(lapply(D, function(x) length(x$pressure))))
   longitude <- unlist(lapply(D, function(x) x$longitude[1]), use.names = FALSE)
@@ -117,12 +127,12 @@ read.argo.mbari <- function(file)
     chlorophyllFlag <- makeMatrix(F, 'chlorophyll')
   }
   if ("backscatter" %in% names) {
-      backscatter <- makeMatrix(D, 'backscatter')
-      backscatterFlag <- makeMatrix(F, 'backscatter')
+    backscatter <- makeMatrix(D, 'backscatter')
+    backscatterFlag <- makeMatrix(F, 'backscatter')
   }
   if ("pHinsitu" %in% names) {
-     pHinsitu <- makeMatrix(D, 'pHinsitu')
-     pHinsituFlag <- makeMatrix(F, 'pHinsitu')
+    pHinsitu <- makeMatrix(D, 'pHinsitu')
+    pHinsituFlag <- makeMatrix(F, 'pHinsitu')
   }
   if ("pH25C" %in% names) {
     pH25C <- makeMatrix(D, 'pH25C')
@@ -132,7 +142,7 @@ read.argo.mbari <- function(file)
   d <- as.argo(time=time, longitude=ifelse(longitude>180, longitude-360, longitude),
                latitude=latitude,
                pressure=pressure, temperature=temperature, salinity=salinity,
-               filename=filename, id="?")
+               filename=filename, id=id)
   d <- oceSetData(d, 'oxygen', oxygen, units=list(unit=expression(mu*M), scale=""))
   d <- oceSetData(d, 'oxygenSaturation', oxygenSaturation, units=list(unit=expression(), scale=""))
   d <- oceSetMetadata(d, 'flags', list(pressure=pressureFlag, temperature=temperatureFlag,
@@ -158,7 +168,5 @@ read.argo.mbari <- function(file)
     d@metadata$flags$pH25C <- pH25CFlag
   }
 
-  return(d)
+  d
 }
-
-
