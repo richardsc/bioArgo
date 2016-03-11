@@ -21,6 +21,11 @@ plot(as.section(d), which='oxygen', xtype='time', ztype='image', zcol=oceColorsO
 ```
 ![5145Example](5145.png)
 
+It is also possible to read the file straight from the MBARI website, by specifying the name along with the `url=TRUE` argument:
+```r
+d <- read.argo.mbari('inst/extdata/5145HawaiiQC.txt', url=TRUE)
+```
+
 ## Available files
 
 A list of [available data files](http://www3.mbari.org/lobo/data/floatvizdata/floatvizconfig.txt) is below. Note that some files have "QC" versions, where the filename is modified like `5145HawaiiQC.TXT`. See the full list with detailed information at [http://www3.mbari.org/chemsensor/FloatList.html](http://www3.mbari.org/chemsensor/FloatList.html)
