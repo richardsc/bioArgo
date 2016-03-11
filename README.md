@@ -23,7 +23,7 @@ plot(as.section(d), which='oxygen', xtype='time', ztype='image', zcol=oceColorsO
 
 It is also possible to read the file straight from the MBARI website, by specifying the name along with the `url=TRUE` argument:
 ```r
-d <- read.argo.mbari('inst/extdata/5145HawaiiQC.txt', url=TRUE)
+d <- read.argo.mbari('5145HawaiiQC.txt', url=TRUE)
 ```
 
 ## Available files
