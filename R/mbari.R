@@ -31,7 +31,6 @@ read.argo.mbari <- function(file, url=FALSE)
         filename <- tempfile()
         baseurl <- 'http://www3.mbari.org/lobo/Data/FloatVizData/'
         qc <- length(grep('QC', file)) > 0
-        browser()
         if (!qc) {
             url <- paste0(baseurl, file)
         } else {
