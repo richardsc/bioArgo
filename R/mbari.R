@@ -39,6 +39,7 @@ read.argo.mbari <- function(file, url=FALSE)
         message(paste0('Downloading to ', filename))
         download.file(url, filename)
         file <- file(filename, "r")
+        on.exit(close(file))
     }
     header <- readLines(file, encoding="latin1", n=100)
     isHeader <- grepl("^//", header, useBytes=TRUE)
