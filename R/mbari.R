@@ -5,7 +5,7 @@ NULL
 #'
 #' Reads a "Bio-Argo" formatted file into an \code{oce} \code{argo} object.
 #'
-#' @param file local filename or connection from which to read data.
+#' @param file local filename or connection from which to read data. In the case where the argument \code{url=TRUE}, it can specify the float file without the \code{.TXT} extention.
 #' @param url logical indicating if the file should be obtained directly via download from the MBARI website
 #' @details Reads the plain-text csv files obtained from \code{http://www.mbari.org/science/upper-ocean-systems/chemical-sensor-group/floatviz/}
 #' @return An \code{oce} \code{argo} object, containing the extra data columns
@@ -28,6 +28,9 @@ read.argo.mbari <- function(file, url=FALSE)
         file <- file(file, "r")
         on.exit(close(file))
     } else if (url & is.character(file)) {
+        ## check for the .txt extension
+        hasTXT <- ifelse(length(unlist(strsplit(file, '.', fixed=TRUE))) > 1, TRUE, FALSE)
+        if (!hasTXT) file <- paste0(file, '.txt')
         filename <- tempfile()
         baseurl <- 'http://www3.mbari.org/lobo/Data/FloatVizData/'
         qc <- length(grep('QC', file)) > 0

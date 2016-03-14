@@ -6,6 +6,7 @@ This package provides the facility to read the [MBARI BioArgo float data](http:/
 
 The `mbari` package is not currently on CRAN. The best way to install `mbari` is to use the `devtools` package:
 ```r
+## install.packages('devtools')
 library(devtools)
 install_github('richardsc/mbari', ref='master')
 ```
