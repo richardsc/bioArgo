@@ -6,7 +6,8 @@ NULL
 #' Reads a "Bio-Argo" formatted file into an \code{oce} \code{argo} object.
 #'
 #' @param file local filename or connection from which to read data. In the case where the argument \code{url=TRUE}, it can specify the float file without the \code{.TXT} extention.
-#' @param url logical indicating if the file should be obtained directly via download from the MBARI website
+#' @param url logical indicating if the file should be obtained directly via download from the MBARI website. Will also check to see if there is a locally cached copy in the current working directory (see \code{cache} argument).
+#' @param cache ignored if \code{url=FALSE}. Logical indicating if the downloaded file should be cached locally. 
 #' @details Reads the plain-text csv files obtained from \code{http://www.mbari.org/science/upper-ocean-systems/chemical-sensor-group/floatviz/}
 #' @return An \code{oce} \code{argo} object, containing the extra data columns
 #'   corresponding to the biological data.
@@ -20,7 +21,7 @@ NULL
 #' plot(d)
 #' plot(ds, xtype='time', which='oxygen')
 #' @export
-read.argo.mbari <- function(file, url=FALSE)
+read.argo.mbari <- function(file, url=FALSE, cache=FALSE)
 {
     filename <- ""
     if (!url & is.character(file)) {
@@ -31,7 +32,7 @@ read.argo.mbari <- function(file, url=FALSE)
         ## check for the .txt extension
         hasTXT <- ifelse(length(unlist(strsplit(file, '.', fixed=TRUE))) > 1, TRUE, FALSE)
         if (!hasTXT) file <- paste0(file, '.txt')
-        filename <- tempfile()
+        if (cache) filename <- file else filename <- tempfile()
         baseurl <- 'http://www3.mbari.org/lobo/Data/FloatVizData/'
         qc <- length(grep('QC', file)) > 0
         if (!qc) {
@@ -39,8 +40,14 @@ read.argo.mbari <- function(file, url=FALSE)
         } else {
             url <- paste0(baseurl, 'QC/', file)
         }
-        message(paste0('Downloading to ', filename))
-        download.file(url, filename)
+        ## does the file already exist in wd?
+        if (sum(grep(file, list.files())) > 0) {
+            message(paste0('Loading cached file ', file))
+            filename <- file
+        } else {
+            message(paste0('Downloading to ', filename))
+            download.file(url, filename)
+        }
         file <- file(filename, "r")
         on.exit(close(file))
     }
