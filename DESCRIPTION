@@ -1,4 +1,4 @@
-Package: mbari
+Package: bioArgo
 Type: Package
 Depends: oce
 Title: Read MBARI-formatted BioArgo files

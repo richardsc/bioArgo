@@ -4,11 +4,11 @@ This package provides the facility to read the [MBARI BioArgo float data](http:/
 
 ## Installation
 
-The `mbari` package is not currently on CRAN. The best way to install `mbari` is to use the `devtools` package:
+The `bioArgo` package is not currently on CRAN. The best way to install `bioArgo` is to use the `devtools` package:
 ```r
 ## install.packages('devtools')
 library(devtools)
-install_github('richardsc/mbari', ref='master')
+install_github('richardsc/bioArgo', ref='master')
 ```
 
 ## Example
@@ -17,14 +17,14 @@ Load one of the included data files, and plot an oxygen section using a [`cmocea
 ```r
 library(oce)
 library(mbari)
-d <- read.argo.mbari('inst/extdata/5145HawaiiQc.txt')
+d <- read.bioArgo('inst/extdata/5145HawaiiQc.txt')
 plot(as.section(d), which='oxygen', xtype='time', ztype='image', zcol=oceColorsOxygen)
 ```
 ![5145Example](5145.png)
 
 It is also possible to read the file straight from the MBARI website, by specifying the name along with the `url=TRUE` argument:
 ```r
-d <- read.argo.mbari('5145HawaiiQC.txt', url=TRUE)
+d <- read.bioArgo('5145HawaiiQC.txt', url=TRUE)
 ```
 
 ## Available files

@@ -15,13 +15,13 @@ NULL
 #' @seealso \code{read.argo}, \code{as.argo}, and \code{as.section} from the
 #'   \code{oce} package
 #' @examples
-#' d <- read.argo.mbari(system.file("extdata", "5145HawaiiQc.txt", package="mbari"))
+#' d <- read.bioArgo(system.file("extdata", "5145HawaiiQc.txt", package="bioArgo"))
 #' ds <- as.section(d)
 #' par(mfrow=c(2, 1))
 #' plot(d)
 #' plot(ds, xtype='time', which='oxygen')
 #' @export
-read.argo.mbari <- function(file, url=FALSE, cache=FALSE)
+read.bioArgo <- function(file, url=FALSE, cache=FALSE)
 {
     filename <- ""
     if (!url & is.character(file)) {
