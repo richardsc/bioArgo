@@ -16,7 +16,7 @@ install_github('richardsc/bioArgo', ref='master')
 Load one of the included data files, and plot an oxygen section using a [`cmocean`](http://matplotlib.org/cmocean/) colour scheme:
 ```r
 library(oce)
-library(mbari)
+library(bioArgo)
 d <- read.bioArgo('inst/extdata/5145HawaiiQc.txt')
 plot(as.section(d), which='oxygen', xtype='time', ztype='image', zcol=oceColorsOxygen)
 ```
