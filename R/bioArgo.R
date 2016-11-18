@@ -167,28 +167,28 @@ read.bioArgo <- function(file, url=FALSE, cache=FALSE)
                  latitude=latitude,
                  pressure=pressure, temperature=temperature, salinity=salinity,
                  filename=filename, id=id)
-    d <- oceSetData(d, 'oxygen', oxygen, units=list(unit=expression(mu*M), scale=""))
-    d <- oceSetData(d, 'oxygenSaturation', oxygenSaturation, units=list(unit=expression(), scale=""))
+    d <- oceSetData(d, 'oxygen', oxygen, unit=list(unit=expression(mu*M), scale=""))
+    d <- oceSetData(d, 'oxygenSaturation', oxygenSaturation, unit=list(unit=expression(), scale=""))
     d <- oceSetMetadata(d, 'flags', list(pressure=pressureFlag, temperature=temperatureFlag,
                                          salinity=salinityFlag,oxygen=oxygenFlag,oxygenSaturation=oxygenSaturationFlag))
     if ("nitrate" %in% names)  {
-        d <- oceSetData(d, 'nitrate', nitrate, units=list(unit=expression(mu*M), scale=""))
+        d <- oceSetData(d, 'nitrate', nitrate, unit=list(unit=expression(mu*M), scale=""))
         d@metadata$flags$nitrate <- nitrateFlag
     }
     if ("chlorophyll" %in% names)  {
-        d <- oceSetData(d, 'chlorophyll', chlorophyll, units=list(unit=expression(mu*g/l), scale=""))
+        d <- oceSetData(d, 'chlorophyll', chlorophyll, unit=list(unit=expression(mu*g/l), scale=""))
         d@metadata$flags$chlorophyll <- chlorophyllFlag
     }
     if ("backscatter" %in% names) {
-        d <- oceSetData(d, 'backscatter', backscatter, units=list(unit=expression(1/(m*sr)), scale=""))
+        d <- oceSetData(d, 'backscatter', backscatter, unit=list(unit=expression(1/(m*sr)), scale=""))
         d@metadata$flags$backscatter <- backscatterFlag
     }
     if ("pHinsitu" %in% names)  {
-        d <- oceSetData(d, 'pHinsitu', pHinsitu, units=list(unit=expression(Total), scale=""))
+        d <- oceSetData(d, 'pHinsitu', pHinsitu, unit=list(unit=expression(Total), scale=""))
         d@metadata$flags$pHinsitu <- pHinsituFlag
     }
     if ("pH25C" %in% names)  {
-        d <- oceSetData(d, 'pH25C', pH25C, units=list(unit=expression(Total), scale=""))
+        d <- oceSetData(d, 'pH25C', pH25C, unit=list(unit=expression(Total), scale=""))
         d@metadata$flags$pH25C <- pH25CFlag
     }
 
